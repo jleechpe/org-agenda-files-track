@@ -55,7 +55,7 @@ When `org-agenda-files-track-ql-mode' is enabled, it updates the variable
 `org-agenda-custom-commands' and `org-ql-views'"
   :init-value nil
   :group 'org
-  :global nil
+  :global t
   (if org-agenda-files-track-ql-mode
       (add-hook 'org-mode-hook #'org-agenda-files-track-ql-update-file-h)
     (remove-hook 'org-mode-hook #'org-agenda-files-track-ql-update-file-h)
@@ -102,7 +102,7 @@ Extracts queries from an `org-ql' set of
                                                     "org-ql-block"))
                                     blocks)))
     (append
-     (mapcar #'cadr org-ql-blocks)
+     (mapcar (lambda (x) (eval (cadr x))) org-ql-blocks)
      ;; ignore views that take a function, which build the query at runtime
      (seq-filter #'identity
                  (mapcar (lambda (view)
